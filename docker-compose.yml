@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  nginx:
+    image: jwilder/nginx-proxy:latest
+    networks:
+      - database
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  mysql:
+    image: mysql:latest
+    networks:
+      - database
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    networks:
+      - database
+    environment:
+      - PMA_HOST=mysql
+      - VIRTUAL_HOST=pma.local
+
+  php:
+    image: php:7.2-apache
+    networks:
+      - database
+      - web
+    volumes:
+      - "./www:/var/www/html/"
+    environment:
+      - VIRTUAL_HOST=dev.local
+
+networks:
+  database:
+  web:
