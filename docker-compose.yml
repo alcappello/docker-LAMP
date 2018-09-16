@@ -47,8 +47,7 @@ services:
       - database
       - web
     volumes:
-      - "./public:/var/www/html/"
-      - "./src:/var/www/src"
+      - "./www:/var/www/html/"
     environment:
       - VIRTUAL_HOST=dev.local
 
