@@ -1,6 +1,6 @@
 # Docker LAMP
 
-This is a minimal configuration to allow a quick-start dev-env within Docker. The stack includes:
+This is a minimal configuration to allow quick and basic PHP development within Docker. The compose file includes:
 
 - [PHP](https://hub.docker.com/_/php/)
 - [MariaDB](https://hub.docker.com/_/mariadb/)
