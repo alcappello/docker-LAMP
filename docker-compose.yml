@@ -1,4 +1,4 @@
-version: '3'
+version: "3.7"
 
 services:
   nginx:
@@ -11,10 +11,12 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
-  mysql:
-    image: mysql:latest
+  mariadb:
+    image: mariadb:latest
     networks:
       - database
+    volumes:
+      - "./data:/var/lib/mysql"
     ports:
       - "3306:3306"
     environment:
@@ -25,16 +27,28 @@ services:
     networks:
       - database
     environment:
-      - PMA_HOST=mysql
-      - VIRTUAL_HOST=pma.local
+      - PMA_HOST=mariadb
+      - VIRTUAL_HOST=sql.local
+
+  # adminer:
+  #   image: adminer:latest
+  #   networks:
+  #     - database
+  #   environment:
+  #     - ADMINER_DESIGN=nette
+  #     - ADMINER_PLUGINS=tables-filter tinymce
+  #     - ADMINER_DEFAULT_SERVER=mariadb
+  #     - VIRTUAL_HOST=sql.local
 
   php:
-    image: php:7.2-apache
+    build:
+      context: "./docker/php"
     networks:
       - database
       - web
     volumes:
-      - "./www:/var/www/html/"
+      - "./public:/var/www/html/"
+      - "./src:/var/www/src"
     environment:
       - VIRTUAL_HOST=dev.local
 
